@@ -1,0 +1,44 @@
+what is container and why is container (drax meme)
+	before container
+		monolithic applications
+		long development cycles
+		single environment
+		slowly scaling up
+	reality of today's application
+		decoupled services
+		fast, iterative improvements
+		multiple environments
+		quickly scaling out
+	complex deployment
+		Many different stacks:
+			languages
+			frameworks
+			databases
+		Many different targets:
+			individual development environments
+			pre-production, QA, staging...
+			production: on prem, cloud, hybrid
+	the idea of containerization
+		shipping physical good:
+			across the world
+			across different standard
+			across different size of harbor and facility
+			security and refridgeration
+	the promise of containerization
+		simplifying all of the above concern and problem
+	pros and cons of containerized development lifecycle
+		Escape dependency hell
+		On-board developers and contributors rapidly
+		Implement reliable CI easily
+		Use container images as build artefacts
+		Decouple "plumbing" from application logic
+what is docker
+	before and after docker
+		format and apis
+		shipping
+		devops
+	the scale of dockerization
+		docker run - single container
+		docker-compose up - cluster of container
+		k8s / swarm - interprise scaled container
+demo
