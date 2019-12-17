@@ -32,6 +32,10 @@
       border: 1px solid black;
     }
 
+    .empbg{
+      background-color: #EFF0F1;
+    }
+
     .navback{
       float: right;
     }
@@ -411,57 +415,9 @@ name: docker_crash_devops2
 
 name: docker_in_prod
 # Docker trong Hiện thực
-
----
-
-name: contents
-class: left
-
-# Table of Contents
-
-• [Item1](#Item1)
-
-• [Item2](#Item2)
-
----
-name: Item1
-class: left
-
-.navback[[back](#contents)]
-
-# I. Item1:
-
-Code example:
-
-E.g:<pre><code class="csharp" style="background-color:darkslategray;color:white" >
-    .class[SqlConnection] conn = new .class[SqlConnection]("...");
-    .class[SqlCommand] cmd = conn.CreateCommand();
-    cmd.CommandText = @"SELECT *
-                        FROM Customer
-                        WHERE City = @CityParam";
-    cmd.Parameters.Add("@CityParam", "Paris");
-    .class[SqlDataReader] r = cmd.ExecuteReader();
-    while ( r.HasRows )
-    {
-      .class[Console].WriteLine(r["Address"] + r["City"]);
-    }
-    </code></pre>
----
-name: Item2
-class: left
-
-.navback[[back](#contents)]
-
-# II. Item2:
-
-<button onclick="request('1')">Get values</button>
-.left[
-<pre><code class="csharp" style="background-color:darkslategray;color:white" >return values;
-</code></pre>
-]
-<text id="result1">result:</text>
-<br/>
-<text id="time1">time taken:</text>
+* .empbg[docker] được dùng để quản lí từng container đơn lẻ
+* .empbg[docker-compose] được dùng để quản lí 1 stack ( 1 nhóm các container có liên hệ với nhau )
+* .empbg[kubernetes(k8s)] / .empbg[docker swarm] được dùng để quản lí 1 stack với khả năng scale được nhấn mạnh
 ---
 
 class: center, middle
