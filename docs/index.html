@@ -16,7 +16,7 @@
     @import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
 
     body {
-      font-family: 'Droid Serif';
+      font-family: 'UVNBaiSau_R';
     }
 
     h1,
@@ -30,6 +30,10 @@
     th,
     td {
       border: 1px solid black;
+    }
+
+    .navback{
+      float: right;
     }
 
     .class {
@@ -143,8 +147,18 @@ class: center
 # Cơ bản về container
 .small-image[![lala](images/blue_container.png)]
 ---
+
+name: toc
+class: left
+# Mục lục
+* [Lời mở đầu](#y_container)
+* [Hiện thực ngành công nghiệp phần mềm](#y_container1)
+* [Ý tưởng về container](#y_container4_shipping_container1)
+* [Docker đứng đâu trong cơn bão container?](#docker_crash)
+---
 name: y_container
 class: left
+.navback[[back](#toc)]
 # Tại sao container trở thành cơn sốt hiện nay
 
 Khái niệm container đã tồn tại từ 1979 thông qua công cụ chroot trên Unix.
@@ -156,6 +170,7 @@ Việc tách rời này cho phép ứng dụng có thể được triển khai m
 
 name: y_container1
 class: left
+.navback[[back](#toc)]
 # Ngành công nghiệp đã thay đổi
 
 Trước kia:
@@ -215,6 +230,7 @@ class: left
 
 name: y_container4_shipping_container1
 class: left
+.navback[[back](#toc)]
 # Sự giống nhau với container chuyển hàng
 .small-image[![shipping](images/shipping.png)]
 ---
@@ -235,9 +251,167 @@ class: left
 Đơn giản hóa việc triển khai ứng dụng. Chỉ cần gói gọn artifact trong một container và đẩy nó lên cloud.
 ---
 
-name: y_container5_prosandcons1
+name: y_container5
 class: left
+.navback[[back](#toc)]
 # Ưu và khuyết của containerized development lifecycle
+
+* [Thoát khỏi dependency hell](#y_container5_escape)
+* [On-board developer nhanh chóng và dễ dàng](#y_container5_onboard)
+* [Hiện thực hóa pipeline CI một cách dễ dàng](#y_container5_ci)
+* [Sử dụng container như là artifact](#y_container5_artifact)
+* [Tách rời các hệ thống khỏi Logic của ứng dụng](#y_container5_plumbing)
+---
+
+name: y_container5_escape
+class: left
+.navback[[back](#y_container5)]
+# Thoát khỏi depedency hell
+hay vấn nạn <strong>"Chạy được trên máy tao"</strong>
+
+1. Viết hướng dẫn cài đặt các dependency vào 1 file install.sh / install.bat
+2. Biến file này thành 1 Dockerfile, thử nghiệm chạy trên máy dev
+3. Nếu Dockerfile build thành công thành 1 image, nó sẽ build thành công ở khắp nơi
+4. ???
+5. Profit, Ăn mừng vì bạn đã thoát khỏi dependency hell và "Chạy được trên máy tao"
+---
+
+name: y_container5_onboard
+class: left
+.navback[[back](#y_container5)]
+# On-board developer
+
+Trước kia:
+* Dev cũ sẽ thực hiện document lại các config cần thiết để build và chạy được ứng dụng trên máy dev
+* Dev mới sẽ manually apply các config trên lên máy dev của mình
+
+<strong>Vấn đề:</strong>
+* Khả năng không nhỏ là Dev mới sẽ để thiếu config nào đó, hoặc config trên wiki không up-to-date với hiện thực ứng dụng
+* Việc setup cho dev mới tốn thời gian và phức tạp
+---
+
+name: y_container5_onboard2
+class: left
+.navback[[back](#y_container5)]
+# On-board developer
+
+Bây giờ với Container:
+
+1. Viết Dockerfile cho ứng dụng
+2. Sử dụng các image có sẵn trên DockerHub cho các dịch vụ như mysql, redis, ...
+3. Sử dụng Compose để diễn tả stack của ứng dụng
+4. On-board dev mới với 2 command:
+git clone &lt; repo &gt;
+docker-compose up
+5. Lặp lại với các môi trường khác như QA, DevTest, ...
+---
+name: y_container5_ci
+class: left
+.navback[[back](#y_container5)]
+# Hiện thực hóa pipeline CI
+1. Build ra môi trường test với Dockerfile hay Compose file
+2. Với mỗi lần chạy test, tạo ra một container mới hay stack mới
+3. Mỗi lần chạy test sẽ được thực hiện trong một môi trường sạch và mới
+4. Không bị ảnh hưởng bởi những lần test Trước
+
+Nhanh hơn và rẻ hơn việc tạo VM!
+---
+
+name: y_container5_artifact
+class: left
+.navback[[back](#y_container5)]
+# Sử dụng container như là artifact
+1. Build ứng dụng từ Dockerfile
+2. Lưu lại image build ra vào trong 1 Registry nào đó
+3. Giữ lại image mãi mãi(Khi mà vẫn còn giá trị)
+4. Sử dụng image trên trong QA, CI, Test, ...
+5. Sử dụng image trên trong Production
+6. Có điều gì đó sai sai? Rollback về image trước!
+7. Cần phải replicate bug từ version cũ? Chạy image cũ thôi!
+
+Image chứa tất cả mọi thứ cần thiết để chạy ứng dụng, bao gồm thư viện, dependency, config, ...
+---
+
+name: y_container5_plumbing
+class: left
+.navback[[back](#y_container5)]
+# Tách rời các hệ thống khỏi Logic của ứng dụng
+1. Sử dụng các cái tên có ý nghĩa như "db", "api" thay vì chuỗi IP
+2. Sử dụng Compose để chạy stack của ứng dụng
+3. Docker sẽ tạo ra DNS để resolve những cái tên trên thành container tương ứng
+4. Bây giờ bạn có thể scale ngang(thêm hệ thống), thêm load balancer, thêm replication, ... mà không cần thay đổi logic code
+---
+
+name: docker_crash
+class: left
+.navback[[back](#toc)]
+# Docker đứng đâu trong con bão container này?
+1. [Format và APIs, trước và sau Docker](#docker_crash_fapi)
+2. [Shipping, trước và sau Docker](#docker_crash_ship)
+3. [Devs vs Ops, trước và sau Docker](#docker_crash_devops)
+---
+
+name: docker_crash_fapi
+class: left
+.navback[[back](#docker_crash)]
+# Format và APIs, trước Docker
+* Không có một chuẩn format cụ thể nào ( một file zip/tarball không phải là một chuẩn format)
+* Container khó sử dụng ( không chỉ bao gồm một câu lệnh "docker run ubuntu")
+
+Tương tự với container hàng hóa:
+* Container hàng không chỉ là một cái hộp thép
+* Container hàng là một hộp thép với kích cõ, móc kéo, ... được làm theo chuẩn ISO 668
+---
+
+name: docker_crash_fapi2
+class: left
+# Format và APIs, sau Docker
+* Thống nhất format của container, khiến container trở nên portable
+* Khiến cho container dễ sử dụng hơn
+---
+
+name: docker_crash_ship
+class: left
+.navback[[back](#docker_crash)]
+# Shipping trước Docker
+* Depedency hell
+* "Chạy trên máy tao"
+* Việc triển khai thường được bắt đầu từ "không có gì" và thường xảy ra vấn đề (do thiếu sự nhất quán)
+---
+
+name: docker_crash_ship2
+class: left
+# Shipping sau Docker
+* Container image chứa sẵn dependency
+* Do image nhất quán nên né được vấn nạn "Chạy trên máy tao"
+* Image thì lớn hơn một build artifact bình thường nhưng được tách ra thành nhiều layer
+* Việc ship đôi khi nhẹ hơn do chỉ ship những layer được thay đổi
+---
+
+name: docker_crash_devops
+class: left
+.navback[[back](#docker_crash)]
+# DevOps trước Docker
+* Ops nhận được từ Dev một commit hash cần triển khai cùng các hướng dẫn setup
+* Môi trường dev thường khác xe môi trường Production
+* Ops thường không có môi trường dev giống Dev
+* Ops phải tìm và xử lí sự khác nhau giữa các môi trường và đôi khi phải hỏi Dev
+* Việc ship xảy ra nhiều va chạm và delay
+---
+
+name: docker_crash_devops2
+# DevOps Sau Docker
+* Ops nhận được yêu cầu triển khai một commit hash
+* Ops chỉ cần lấy image đã được build từ commit hash
+* Ops luôn có thể chạy được image trên y hệt như Dev
+* Ops vẫn phải thay đổi gì đó để phù hợp với môi trường deploy khác nhưng việc này trở nên dễ hơn do đã có sẵn điểm tham khảo
+* Dev có thể tự thực hiện việc triển khai với ít sự tham gia từ Ops hơn
+* Việc ship trở nên song song và nhanh chóng hơn
+---
+
+name: docker_in_prod
+# Docker trong Hiện thực
+
 ---
 
 name: contents
@@ -253,7 +427,7 @@ class: left
 name: Item1
 class: left
 
-.right[[back](#contents)]
+.navback[[back](#contents)]
 
 # I. Item1:
 
@@ -276,7 +450,7 @@ E.g:<pre><code class="csharp" style="background-color:darkslategray;color:white"
 name: Item2
 class: left
 
-.right[[back](#contents)]
+.navback[[back](#contents)]
 
 # II. Item2:
 
